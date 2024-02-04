@@ -17,19 +17,21 @@ function App() {
   // State variable that contains all the saved games
   const [allGamesData, setAllGamesData] = useState(null)
  
-  // Had to do this fetch for stability
+  // Rerender the page when game turns on or off
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get("/games")
-        setAllGamesData(response.data.allGames);
-      } catch (error) {
-        console.error("Error fetching data:", error)
-      }
-    }
-    
     fetchData()
-  }, [gameOn, allGamesData])
+  }, [gameOn])
+
+  // Function to rerender the page from server data
+  const fetchData = async () => {
+    try {
+      const response = await axios.get("/games")
+      setAllGamesData(response.data.allGames);
+    } catch (error) {
+      console.error("Error fetching data:", error)
+    }
+  }
+  
   
   
   // Handy object for creating new games
@@ -168,6 +170,7 @@ function App() {
   // Delete function
   const deleteFunc = (gameObj) => {
     axios.delete(`/games/${gameObj.id}` ).then((res) => {})
+    fetchData()
   }
 
   // New Game Function
