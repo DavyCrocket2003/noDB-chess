@@ -103,7 +103,7 @@ let GAME_DATA = [
             "67": "",
             "68": "",
             "51": "",
-            "52": "n",
+            "52": "",
             "53": "",
             "54": "N",
             "55": "P",
@@ -217,12 +217,44 @@ let GAME_DATA = [
           }
     }
 ]
+let globalId = GAME_DATA.length + 1
 
 
 
 
 
 const handlerFunctions = {
+    getGames: (req, res) => {
+        res.send({
+            message: "Here are all the games",
+            allGames: GAME_DATA
+        })
+        console.log("getGames called")
+    },
+    saveGame: (req, res) => {
+        const gameId = globalId++
+        console.log(req.body)
+        GAME_DATA.push({
+            id: gameId,
+            name: req.body.name,
+            state: req.body.state
+        })
+        console.log(GAME_DATA)
+        res.send(`Game ${req.body.name} saved successfully!`)
+    },
+    deleteGame: (req, res) => {
+        GAME_DATA = GAME_DATA.filter((gameObj) => gameObj.id !== +req.params.id)
+        res.send(`Game ${req.params.id} deleted!`)
+        console.log(GAME_DATA)
+        
+    },
+    overwriteGame: (req, res) => {
+        const gameId = +req.body.id
+        const idx = GAME_DATA.findIndex((gameObj) => gameObj.id === gameId)
+        GAME_DATA[idx] = req.body
+        console.log(req.body)
+        res.send(`${req.body.name} has been overwritten.`)
+    }
 
 }
 

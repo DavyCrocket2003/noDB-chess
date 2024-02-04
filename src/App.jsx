@@ -1,14 +1,39 @@
 import axios from 'axios';
 import './App.css';
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import ChessSquare from "/src/components/ChessSquare.jsx"
 import QuitButton from "/src/components/QuitButton.jsx"
+import SavedGamesTable from './components/SavedGamesTable';
 
 
 
 function App() {
 
-  const [gameState, setGameState] = useState({
+
+  
+  // Variable that controls whether to populate a game or the save menu
+  const [gameOn, setGameOn] = useState(true)
+  
+  // State variable that contains all the saved games
+  const [allGamesData, setAllGamesData] = useState(null)
+ 
+  // Had to do this fetch for stability
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get("/games")
+        setAllGamesData(response.data.allGames);
+      } catch (error) {
+        console.error("Error fetching data:", error)
+      }
+    }
+    
+    fetchData()
+  }, [gameOn, allGamesData])
+  
+  
+  // Handy object for creating new games
+  const freshGame = {
     "pieceInHand": false,
     "previousSquare": "25",
     "81": "R",
@@ -75,10 +100,18 @@ function App() {
     "16": "b",
     "17": "n",
     "18": "r",
+  }
+  // State variable for the local game state (The one that shows on the game board)
+  const [gameState, setGameState] = useState({
+    state: freshGame
   })
+  // Function to reach inside gameState and set the correct state
+  const updateSquare = (square, piece, newGameState=gameState) => {
+    newGameState.state[square] = piece
+    setGameState(newGameState)
+  }
 
-  const [gameOn, setGameOn] = useState(true)
-
+  // Load images for the chess sprites
   const images = {}
   {
     images.P = new Image()
@@ -107,26 +140,58 @@ function App() {
     images.q.src = "/src/pieces/queen1.png"
   }
 
-  const clickFunc = (e) => {
-    console.log(e.target)
-    console.log(gameState[e.target.id])
-    console.log(images[gameState[e.target.id]])
-    let piece = gameState.pieceInHand
-    if (piece) {
-      setGameState({ ...gameState,
-        [e.target.id]: piece,
-        pieceInHand: false,
-        [gameState.previousSquare]: "",
-        previousSquare: e.target.id,
-
-        },)
+  // Save function
+  const saveFunc = (game) => {
+    console.log("saveFunc called")
+    const idx = allGamesData.findIndex((gameObj) => {
+      return gameObj.id === game.id
+    })
+    if (idx === -1) {
+      let gameName = prompt("Enter the name of your game: ")
+      let newGameState = {...game, name: gameName}
+      setGameState(newGameState)
+      console.log(newGameState)
+      axios.post(`/games/`, newGameState)
     } else {
-      setGameState({
-        ...gameState,
-        pieceInHand: gameState[e.target.id],
-        previousSquare: e.target.id
-      })
+      axios.put("/games", game)
     }
+    setGameOn(false)
+
+  }
+
+  // Load function
+  const loadFunc = (gameObj) => {
+    setGameOn(true)
+    setGameState(gameObj)
+  }
+
+  // Delete function
+  const deleteFunc = (gameObj) => {
+    axios.delete(`/games/${gameObj.id}` ).then((res) => {})
+  }
+
+  // New Game Function
+  const newFunc = () => {
+    setGameOn(true)
+    setGameState({
+      state: freshGame
+    })
+  }
+
+  // Listening function for the board squares
+  const clickFunc = (e) => {
+    let piece = gameState.state.pieceInHand
+    let newState = gameState.state
+    if (piece) {
+      newState[`${e.target.id}`] = piece
+      newState["pieceInHand"] = false
+      newState[`${gameState.state.previousSquare}`] = ""
+      newState["previousSquare"] = e.target.id
+    } else {
+      newState["pieceInHand"] = gameState.state[e.target.id]
+      newState["previousSquare"] = e.target.id
+    }
+    setGameState({...gameState, state: newState})
   }
   
 
@@ -217,14 +282,18 @@ function App() {
           <ChessSquare key="88" id="88" gameState={gameState} images={images} clickFunc={clickFunc} setState={setGameState}/>
         </div>
       </div>
-      <QuitButton />
+      <QuitButton gameState={gameState} saveFunc={saveFunc} setGameOn={setGameOn}/>
     </>
     )
   } else {
     return (
-      <SavedGamesTable />
+      <SavedGamesTable allGamesData={allGamesData} deleteFunc={deleteFunc} loadFunc={loadFunc} newFunc={newFunc}/>
     )
   }
 }
+
+
+
+
 
 export default App
