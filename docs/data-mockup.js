@@ -1,7 +1,3 @@
-// Each saved game has id, name, and state
-// import GAME_DATA from "docs/data-mockup.js"
-
-
 let GAME_DATA = [
     {
         id: 1,
@@ -290,135 +286,83 @@ let GAME_DATA = [
           pieceInHand: false,
           previousSquare: '88'
         }
-    },
-    {
-    id: 5,
-    name: 'Fischer v Byrne 1956',
-    state: {
-        '11': 'R',
-        '12': '',
-        '13': 'K',
-        '14': '',
-        '15': 'R',
-        '16': '',
-        '17': '',
-        '18': '',
-        '21': 'P',
-        '22': 'P',
-        '23': 'P',
-        '24': '',
-        '25': '',
-        '26': '',
-        '27': '',
-        '28': 'P',
-        '31': '',
-        '32': '',
-        '33': 'N',
-        '34': '',
-        '35': '',
-        '36': 'n',
-        '37': '',
-        '38': 'Q',
-        '41': '',
-        '42': '',
-        '43': '',
-        '44': '',
-        '45': 'P',
-        '46': 'B',
-        '47': '',
-        '48': '',
-        '51': '',
-        '52': '',
-        '53': '',
-        '54': '',
-        '55': '',
-        '56': 'B',
-        '57': '',
-        '58': '',
-        '61': '',
-        '62': 'p',
-        '63': '',
-        '64': 'b',
-        '65': '',
-        '66': 'p',
-        '67': 'q',
-        '68': '',
-        '71': 'p',
-        '72': 'b',
-        '73': 'p',
-        '74': '',
-        '75': '',
-        '76': '',
-        '77': 'p',
-        '78': 'p',
-        '81': '',
-        '82': 'k',
-        '83': '',
-        '84': 'r',
-        '85': '',
-        '86': '',
-        '87': '',
-        '88': 'r',
-        pieceInHand: false,
-        previousSquare: '33'
-    }
-    },
+      },
+      {
+        id: 5,
+        name: 'Fischer v Byrne 1956',
+        state: {
+          '11': 'R',
+          '12': '',
+          '13': 'K',
+          '14': '',
+          '15': 'R',
+          '16': '',
+          '17': '',
+          '18': '',
+          '21': 'P',
+          '22': 'P',
+          '23': 'P',
+          '24': '',
+          '25': '',
+          '26': '',
+          '27': '',
+          '28': 'P',
+          '31': '',
+          '32': '',
+          '33': 'N',
+          '34': '',
+          '35': '',
+          '36': 'n',
+          '37': '',
+          '38': 'Q',
+          '41': '',
+          '42': '',
+          '43': '',
+          '44': '',
+          '45': 'P',
+          '46': 'B',
+          '47': '',
+          '48': '',
+          '51': '',
+          '52': '',
+          '53': '',
+          '54': '',
+          '55': '',
+          '56': 'B',
+          '57': '',
+          '58': '',
+          '61': '',
+          '62': 'p',
+          '63': '',
+          '64': 'b',
+          '65': '',
+          '66': 'p',
+          '67': 'q',
+          '68': '',
+          '71': 'p',
+          '72': 'b',
+          '73': 'p',
+          '74': '',
+          '75': '',
+          '76': '',
+          '77': 'p',
+          '78': 'p',
+          '81': '',
+          '82': 'k',
+          '83': '',
+          '84': 'r',
+          '85': '',
+          '86': '',
+          '87': '',
+          '88': 'r',
+          pieceInHand: false,
+          previousSquare: '33'
+        }
+      },
 
 ]
-let globalId = GAME_DATA.length + 1
 
 
 
 
-
-const handlerFunctions = {
-    getGames: (req, res) => {
-        res.send({
-            message: "Here are all the games",
-            allGames: GAME_DATA
-        })
-        console.log("getGames called")
-    },
-    saveGame: (req, res) => {
-        const gameId = globalId++
-        console.log(req.body)
-        GAME_DATA.push({
-            id: gameId,
-            name: req.body.name,
-            state: req.body.state
-        })
-        console.log(GAME_DATA)
-        res.send(`Game ${req.body.name} saved successfully!`)
-    },
-    deleteGame: (req, res) => {
-        GAME_DATA = GAME_DATA.filter((gameObj) => gameObj.id !== +req.params.id)
-        res.send(`Game ${req.params.id} deleted!`)
-        console.log(GAME_DATA)
-        
-    },
-    overwriteGame: (req, res) => {
-        const gameId = +req.body.id
-        const idx = GAME_DATA.findIndex((gameObj) => gameObj.id === gameId)
-        GAME_DATA[idx] = req.body
-        console.log(req.body)
-        res.send(`${req.body.name} has been overwritten.`)
-    }
-
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-export default handlerFunctions
+export default GAME_DATA

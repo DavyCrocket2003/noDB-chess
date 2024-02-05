@@ -1,6 +1,51 @@
 #root {
   max-width: 1280px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 0px;
   text-align: center;
 }
+
+div {
+  padding: 0px;
+  margin-top: 0px;
+}
+
+.row {
+  display: flex;
+  justify-content: center;
+  margin: 0px;
+  padding: 0px;
+  height: 50px;
+}
+
+button {
+  background-color: #7283a5;
+  padding: 15px;
+}
+
+table {
+  background-color: #747bff;
+  padding: 20px #747bff solid;
+  border: 2px solid black;
+  color: black;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+tr {
+  height: 25px;
+}
+
+th {
+  font-weight: bold;
+}
+td {
+  border: 1px solid black;
+}
+
+body, h1, h2, h3, p, div {
+  margin: 0;
+  padding: 0;
+  background-color: white;
+}
+

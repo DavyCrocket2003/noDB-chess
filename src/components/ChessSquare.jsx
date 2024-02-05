@@ -1,4 +1,3 @@
-import './ChessSquare.css'
 import { useState, useEffect, useRef } from "react"
 
 
@@ -9,10 +8,10 @@ function ChessSquare({id, images, gameState, setState, clickFunc}) {
     useEffect(() => {
         const canvas = canvasRef.current
         const ctx = canvas.getContext('2d')
-        ctx.fillStyle = ((+id[0] + +id[1])%2===0) ? "#2B751E" : "#FFFFFF"
+        ctx.fillStyle = ((+id[0] + +id[1])%2===1) ? "#2B751E" : "#FFFFFF"
         ctx.fillRect(0, 0, canvas.width, canvas.height)
         if (gameState.state[id]) {
-            ctx.drawImage(images[gameState.state[id]],0,0)
+            ctx.drawImage(images[gameState.state[id]],4,4)
         }
 
     }, [gameState.state[id]])

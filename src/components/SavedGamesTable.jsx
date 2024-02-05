@@ -4,12 +4,12 @@
 
 function SavedGamesTable({allGamesData, deleteFunc, loadFunc, newFunc}) {
 
-  // Check if allGamesData is null or undefined
+  // Check if allGamesData is null or undefined (was having that problem)
   if (allGamesData === null || allGamesData === undefined) {
     return <div>Loading...</div>
   }
 
-  // Check for unique IDs
+  // Check for unique IDs (for debugging)
   const uniqueIds = new Set(allGamesData.map((gameObj) => gameObj.id));
   if (uniqueIds.size !== allGamesData.length) {
     console.error('Duplicate or missing IDs found:', allGamesData);
